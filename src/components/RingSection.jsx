@@ -26,7 +26,7 @@ const RingSection = () => {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // 1. Initial States
-      // Ring Section
+      // Ring Section (Top Layer)
       gsap.set([ringTitleRef.current, ringSubtitleRef.current, ringButtonRef.current], {
         opacity: 0,
         y: 40,
@@ -36,10 +36,10 @@ const RingSection = () => {
         scale: 0.8 
       });
       
-      // NxLabs Section (Hidden behind)
+      // NxLabs Section (Bottom Layer - Always there, just covered)
       gsap.set(nxLabsSectionRef.current, { 
-        opacity: 0,
-        zIndex: 0
+        zIndex: 0,
+        opacity: 1 
       });
       gsap.set([nxLabsTitleRef.current, nxLabsSubtitleRef.current], {
         opacity: 0,
@@ -63,56 +63,54 @@ const RingSection = () => {
         .to(ringButtonRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
 
 
-      // 3. ZOOM & TRANSITION ANIMATION (Pinned sequence)
+      // 3. SEAMLESS ZOOM & REVEAL (Pinned sequence)
       const mainTl = gsap.timeline({
         scrollTrigger: {
           trigger: wrapperRef.current,
           start: "top top",
-          end: "+=250%", // Longer distance for premium feel
+          end: "+=200%", // Optimized distance for premium feel
           pin: true,
-          scrub: 1, // Smooth interaction
+          scrub: 1, 
         },
       });
 
-      // Step 1: Fade out text, Zoom into ring
+      // Sequence:
+      // 1. Zoom Ring + Fade out Ring Content
+      // 2. Fade out Ring Section Background (Revealing NxLabs)
+      // 3. Animate NxLabs Content
+      
       mainTl
-        .to(ringContentRef.current, { opacity: 0, y: -50, duration: 2 }, "start")
+        // Start: Fade out text (faster) & Zoom Ring
+        .to([ringContentRef.current, ringTitleRef.current, ringSubtitleRef.current, ringButtonRef.current], { 
+            opacity: 0, 
+            y: -50, 
+            duration: 1.5, 
+            ease: "power2.in" 
+        }, "start")
+        
+        // Massive Zoom to "go through" the ring
         .to(ringRef.current, { 
-          scale: 30, // Big zoom
-          duration: 5, 
+          scale: 60, 
+          opacity: 0, // Fade ring out at the very end of zoom to avoid pixelation
+          duration: 4, 
           ease: "power2.inOut" 
-        }, "start");
+        }, "start")
 
-      // Step 2: Fade out Ring Section background (reveal NxLabs behind)
-      // Starts halfway through the zoom for a portal effect
-      mainTl.to(ringSectionRef.current, { 
-        opacity: 0, 
-        duration: 2,
-        ease: "power1.inOut"
-      }, "-=2.5"); // Overlap with end of zoom
+        // Fade out the PURPLE background wrapper to reveal NxLabs
+        .to(ringSectionRef.current, { 
+          opacity: 0, 
+          duration: 2.5,
+          ease: "power1.inOut"
+        }, "-=2.5") // Overlap significantly with zoom
 
-      // Step 3: NxLabs appears and its content animates in
-      // We ensure it becomes visible and on top as the ring fades
-      mainTl.to(nxLabsSectionRef.current, {
-        opacity: 1,
-        zIndex: 20, // Bring to front
-        duration: 0.1, // Instant switch of z-index essentially
-      }, "-=2.5");
-
-      // Step 4: NxLabs Content Entry (Parallax/Slide up)
-      mainTl
-        .to(nxLabsTitleRef.current, { 
+        // NxLabs Text Entry (Parallax effect)
+        .to([nxLabsTitleRef.current, nxLabsSubtitleRef.current], { 
           opacity: 1, 
           y: 0, 
           duration: 2,
+          stagger: 0.2,
           ease: "power2.out"
-        }, "-=1")
-        .to(nxLabsSubtitleRef.current, { 
-          opacity: 1, 
-          y: 0, 
-          duration: 2,
-          ease: "power2.out"
-        }, "-=1.5");
+        }, "-=2"); // Start coming in as ring fades out
 
     }, wrapperRef);
 
@@ -120,12 +118,12 @@ const RingSection = () => {
   }, []);
 
   return (
-    <div ref={wrapperRef} className="relative h-screen overflow-hidden">
+    <div ref={wrapperRef} className="relative h-screen overflow-hidden bg-black">
       
-      {/* --- NxLabs Section (Behind initially) --- */}
+      {/* --- NxLabs Section (Bottom Layer - Fixed z-0) --- */}
       <section
         ref={nxLabsSectionRef}
-        className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+        className="absolute inset-0 flex flex-col items-center justify-center z-0"
         style={{ backgroundColor: "#000D24" }}
       >
         {/* Abstract SVG Background */}
@@ -159,14 +157,14 @@ const RingSection = () => {
       </section>
 
 
-      {/* --- Ring Section (On Top initially) --- */}
+      {/* --- Ring Section (Top Layer - z-10) --- */}
       <section
         ref={ringSectionRef}
-        className="absolute inset-0 z-10"
+        className="absolute inset-0 z-10 pointer-events-none" // pointer-events-none to let scroll pass through if needed, but we have content
         style={{ backgroundColor: "#5646a3" }}
       >
-        {/* Header Text */}
-        <div ref={ringContentRef} className="absolute top-20 left-8 lg:left-16 z-20">
+         {/* Allow interactions on content */}
+        <div ref={ringContentRef} className="absolute top-20 left-8 lg:left-16 z-20 pointer-events-auto">
           <h2 ref={ringTitleRef} className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-3">
             Introducing NxRing
           </h2>
@@ -179,7 +177,7 @@ const RingSection = () => {
         </div>
 
         {/* Ring Image */}
-        <div className="absolute inset-0 flex items-center justify-center z-10">
+        <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
           <div
             ref={ringRef}
             className="relative w-[350px] h-[350px] md:w-[450px] md:h-[450px] lg:w-[500px] lg:h-[500px]"
