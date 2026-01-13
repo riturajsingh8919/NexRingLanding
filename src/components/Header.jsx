@@ -1,13 +1,11 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isVisible, setIsVisible] = useState(true);
-  const [lastScrollY, setLastScrollY] = useState(0);
 
   const navLinks = [
     { name: "About", href: "/about" },
@@ -15,27 +13,8 @@ const Header = () => {
     { name: "NxRing", href: "/nxring" },
   ];
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down & past 100px
-        setIsVisible(false);
-      } else {
-        // Scrolling up
-        setIsVisible(true);
-      }
-      
-      setLastScrollY(currentScrollY);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [lastScrollY]);
-
   return (
-    <header className={`fixed top-0 left-0 right-0 z-50 py-4 transition-transform duration-300 ${isVisible ? 'translate-y-0' : '-translate-y-full'}`}>
+    <header className="absolute top-0 w-full z-50 py-4">
       <div className="container mx-auto px-4 lg:px-16">
         {/* Header Container with Glassmorphism */}
         <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-6 py-3">
