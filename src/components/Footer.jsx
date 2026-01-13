@@ -109,7 +109,7 @@ export default function Footer() {
 
     return (
         <footer ref={footerRef} className="w-full bg-slate-50 text-slate-900 pt-24 pb-8 overflow-hidden relative border-t border-slate-200">
-            <div className="container mx-auto px-4 md:px-6 flex flex-col justify-between min-h-[60vh]">
+            <div className="max-w-7xl mx-auto px-4 md:px-6 flex flex-col justify-between min-h-[60vh]">
                 
                 {/* 1. Huge Liquid Text Brand Logo */}
                 <div ref={logoRef} className="grow flex items-center justify-center w-full overflow-hidden mb-12 md:mb-0 opacity-0 relative z-10">
