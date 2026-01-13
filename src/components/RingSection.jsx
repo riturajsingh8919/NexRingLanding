@@ -180,7 +180,7 @@ const RingSection = () => {
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
           <div
             ref={ringRef}
-            className="relative w-[350px] h-[350px] md:w-[450px] md:h-[450px] lg:w-[500px] lg:h-[500px]"
+            className="relative w-[350px] h-[350px] md:w-[450px] md:h-[450px] lg:w-[950px] lg:h-[950px]"
             style={{ transformOrigin: "center center" }}
           >
             <Image
