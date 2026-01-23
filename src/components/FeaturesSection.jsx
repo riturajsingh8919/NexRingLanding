@@ -67,28 +67,28 @@ const FeaturesSection = () => {
             <div
               key={index}
               ref={feature.ref}
-              className="flex items-center gap-2 group cursor-default"
+              className="flex items-center gap-1 group cursor-default"
               style={{ transformOrigin: "center bottom" }}
             >
               {/* Icon with hover glow */}
-              <div className="relative w-14 h-14 md:w-20 md:h-20 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+              <div className="relative w-14 h-14 md:w-30 md:h-30 flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
                 <div className="absolute inset-0 bg-white/5 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <Image
                   src={feature.icon}
                   alt={feature.text}
-                  width={80}
-                  height={80}
-                  className="w-full h-full object-contain relative z-10"
+                  width={120}
+                  height={120}
+                  className="w-auto h-auto relative z-10"
                 />
               </div>
               
               {/* Text with hover effect */}
-              <span 
-                className={`text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight ${feature.color} transition-all duration-500 group-hover:tracking-wide`}
+              <h2 
+                className={`text-5xl md:text-7xl lg:text-[12vw] font-serif italic font-normal tracking-tight ${feature.color} transition-all duration-500 group-hover:tracking-wide`}
                 style={{ textShadow: index === 2 ? "none" : "0 0 40px rgba(255,255,255,0.1)" }}
               >
                 {feature.text}
-              </span>
+              </h2>
             </div>
           ))}
         </div>

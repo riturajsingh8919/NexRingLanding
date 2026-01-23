@@ -1,16 +1,19 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Outfit } from "next/font/google";
+import { Inria_Serif } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const outfitSans = Outfit({
+  variable: "--font-outfit-sans",
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inriaSerif = Inria_Serif({
+  variable: "--font-inria-serif",
+  weight: ["300", "400", "700"],
   subsets: ["latin"],
 });
 
@@ -23,7 +26,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${outfitSans.variable} ${inriaSerif.variable} antialiased`}
       >
         <Header />
         {children}

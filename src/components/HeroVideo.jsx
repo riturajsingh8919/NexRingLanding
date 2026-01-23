@@ -50,7 +50,7 @@ const HeroVideo = () => {
       {/* Background Video */}
       <div className="absolute inset-0 z-0">
         <video autoPlay muted loop playsInline className="w-full h-full object-cover">
-          <source src="/hero.mp4" type="video/mp4" />
+          <source src="/hero-bg.mp4" type="video/mp4" />
         </video>
         {/* Gradient overlay */}
         <div className="absolute inset-0 bg-black/40" />
@@ -64,11 +64,11 @@ const HeroVideo = () => {
             ref={headingRef}
             className="text-4xl md:text-6xl font-normal text-center text-white mb-6 drop-shadow-lg"
           >
-            Test Earlier. Understand <br />Deeper. Live Better 
+            Predict. Prevent. Protect
           </h1>
           <p
             ref={subheadingRef}
-            className="text-base md:text-xl text-white/90 leading-relaxed mb-8 max-w-xl text-center"
+            className="text-base md:text-xl font-extralight text-white/90 leading-relaxed mb-8 max-w-xl text-center"
           >
             Annual tests covering 150+ biomarkers, integrated with continuous biometric data to predict, prevent and protect.
           </p>
