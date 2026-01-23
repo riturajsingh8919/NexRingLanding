@@ -16,7 +16,8 @@ const RingSection = () => {
   const ringContentRef = useRef(null);
   const ringTitleRef = useRef(null);
   const ringSubtitleRef = useRef(null);
-  const ringButtonRef = useRef(null);
+  // Separate refs for pricing elements to animate them out together
+  const pricingRef = useRef(null);
 
   const nxLabsSectionRef = useRef(null);
   const nxLabsContentRef = useRef(null);
@@ -27,10 +28,11 @@ const RingSection = () => {
     const ctx = gsap.context(() => {
       // 1. Initial States
       // Ring Section (Top Layer)
-      gsap.set([ringTitleRef.current, ringSubtitleRef.current, ringButtonRef.current], {
+      gsap.set([ringTitleRef.current, ringSubtitleRef.current, pricingRef.current], {
         opacity: 0,
         y: 40,
       });
+      // Set initial scale for video container
       gsap.set(ringRef.current, { 
         opacity: 0, 
         scale: 0.8 
@@ -60,7 +62,7 @@ const RingSection = () => {
         .to(ringRef.current, { opacity: 1, scale: 1, duration: 1, ease: "power2.out" })
         .to(ringTitleRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.8")
         .to(ringSubtitleRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6")
-        .to(ringButtonRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
+        .to(pricingRef.current, { opacity: 1, y: 0, duration: 0.8 }, "-=0.6");
 
 
       // 3. SEAMLESS ZOOM & REVEAL (Pinned sequence)
@@ -75,28 +77,28 @@ const RingSection = () => {
       });
 
       // Sequence:
-      // 1. Zoom Ring + Fade out Ring Content
+      // 1. Zoom Video + Fade out Overlay Content (Title, Pricing)
       // 2. Fade out Ring Section Background (Revealing NxLabs)
       // 3. Animate NxLabs Content
       
       mainTl
-        // Start: Fade out text (faster) & Zoom Ring
-        .to([ringContentRef.current, ringTitleRef.current, ringSubtitleRef.current, ringButtonRef.current], { 
+        // Start: Fade out text & Pricing (faster)
+        .to([ringContentRef.current, pricingRef.current], { 
             opacity: 0, 
             y: -50, 
             duration: 1.5, 
             ease: "power2.in" 
         }, "start")
         
-        // Massive Zoom to "go through" the ring
+        // Massive Zoom to "go through" the video/ring
         .to(ringRef.current, { 
           scale: 60, 
-          opacity: 0, // Fade ring out at the very end of zoom to avoid pixelation
+          opacity: 0, // Fade out at very end
           duration: 4, 
           ease: "power2.inOut" 
         }, "start")
 
-        // Fade out the PURPLE background wrapper to reveal NxLabs
+        // Fade out the BLACK background wrapper to reveal NxLabs
         .to(ringSectionRef.current, { 
           opacity: 0, 
           duration: 2.5,
@@ -143,7 +145,7 @@ const RingSection = () => {
         <div ref={nxLabsContentRef} className="absolute bottom-20 md:bottom-32 left-0 right-0 text-center px-4 z-10">
           <h2 
             ref={nxLabsTitleRef}
-            className="text-5xl md:text-6xl lg:text-8xl font-medium text-white mb-6  tracking-tight"
+            className="text-5xl md:text-6xl lg:text-8xl font-medium text-white mb-6 tracking-tight"
           >
             NxLabs
           </h2>
@@ -160,35 +162,48 @@ const RingSection = () => {
       {/* --- Ring Section (Top Layer - z-10) --- */}
       <section
         ref={ringSectionRef}
-        className="absolute inset-0 z-10 pointer-events-none" // pointer-events-none to let scroll pass through if needed, but we have content
-        style={{ backgroundColor: "#5646a3" }}
+        className="absolute inset-0 z-10 pointer-events-none bg-black"
       >
-         {/* Allow interactions on content */}
-        <div ref={ringContentRef} className="absolute top-20 left-8 lg:left-16 z-20 pointer-events-auto">
-          <h2 ref={ringTitleRef} className="text-4xl md:text-5xl lg:text-6xl font-light text-white mb-3">
-            Introducing NxRing
+         {/* Top Left Content */}
+        <div ref={ringContentRef} className="absolute top-8 left-6 md:top-12 md:left-12 lg:top-16 lg:left-16 z-20 pointer-events-auto max-w-[50%] md:max-w-none">
+          <h2 ref={ringTitleRef} className="text-3xl md:text-5xl lg:text-7xl text-white mb-2 font-light tracking-tight leading-tight">
+            <span className="font-serif italic mr-2 md:mr-3 font-normal">Capture</span>
+             with NxRing
           </h2>
-          <p ref={ringSubtitleRef} className="text-base md:text-lg text-white/70 mb-6">
-            Passive Health Tracking Captured 24/7
+          <p ref={ringSubtitleRef} className="text-xs md:text-base text-white/60 font-light tracking-wide pl-1">
+            Your daily vitals monitored 24/7
           </p>
-          <button ref={ringButtonRef} className="px-6 py-2.5 rounded-full border border-white/40 text-white text-sm hover:bg-white/10 transition-colors cursor-pointer">
-            Learn More
-          </button>
         </div>
 
-        {/* Ring Image */}
+        {/* Top Right Pricing */}
+        <div ref={pricingRef} className="absolute top-8 right-6 md:top-12 md:right-12 lg:top-16 lg:right-16 z-20 pointer-events-auto text-right">
+           <div className="flex flex-col items-end">
+             <span className="text-white/50 text-xl md:text-3xl lg:text-4xl font-light line-through decoration-white/50 decoration-1">
+                $299
+             </span>
+             <span className="text-white text-4xl md:text-6xl lg:text-8xl font-serif italic my-0 md:my-1 font-thin">
+                $199
+             </span>
+             <button className="text-white text-xs md:text-sm lg:text-xl font-serif font-medium italic mt-1 md:mt-2 hover:opacity-80 transition-opacity tracking-widest opacity-90">
+                Order Now
+             </button>
+           </div>
+        </div>
+
+        {/* Ring Video */}
         <div className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none">
           <div
             ref={ringRef}
-            className="relative w-[350px] h-[350px] md:w-[450px] md:h-[450px] lg:w-[950px] lg:h-[950px]"
+            className="relative w-[80vw] h-[50vh] md:w-[60vw] md:h-[60vh] lg:w-[45vw] lg:h-[70vh] will-change-transform" // Responsive sizing using vw/vh
             style={{ transformOrigin: "center center" }}
           >
-            <Image
-              src="/ring.svg"
-              alt="NxRing"
-              fill
-              className="object-contain"
-              priority
+             <video
+              className="w-full h-full object-contain"
+              autoPlay
+              loop
+              muted
+              playsInline
+              src="/ring.mp4" 
             />
           </div>
         </div>
