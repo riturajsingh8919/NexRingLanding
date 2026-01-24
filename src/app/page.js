@@ -11,7 +11,7 @@ export default function Home() {
       <HeroVideo />
       <FeaturesSection />
       <RingSection />
-      <BiomarkerSection />
+      {/* <BiomarkerSection /> */}
       <HorizontalScrollSection />
       <CardCarousel />
     </main>

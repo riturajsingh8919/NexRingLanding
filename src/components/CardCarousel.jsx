@@ -98,7 +98,7 @@ const CardCarousel = () => {
       {/* Header Container - Standard Alignment */}
       <div className="container mx-auto px-4 md:px-6 mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6 relative z-10">
          <div className="max-w-4xl">
-            <h2 className="text-4xl md:text-5xl font-medium text-slate-900 mb-4 tracking-tight whitespace-nowrap">
+            <h2 className="text-4xl font-serif md:text-5xl font-normal text-slate-900 mb-4 tracking-tight whitespace-nowrap">
             Your Personalized Healthcare Plan
             </h2>
             <p className="text-lg text-slate-500 font-light">

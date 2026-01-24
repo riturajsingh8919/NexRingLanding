@@ -14,11 +14,9 @@ const HorizontalScrollSection = () => {
   const triggerRef = useRef(null);
 
   // Slide 1 Refs
-  const brainRef = useRef(null);
   const slide1InputsRef = useRef(null);
-  const brainRingRef = useRef(null);
+  const slide1ConnectorsRef = useRef(null);
   const brainContainerRef = useRef(null);
-  const slide1PathRef = useRef(null);
 
   // Slide 2 Refs
   const flowLinesRef = useRef(null);
@@ -55,7 +53,7 @@ const HorizontalScrollSection = () => {
         ease: "none",
       });
 
-      // --- Slide 1: Premium "Assemble" Animation ---
+      // --- Slide 1: Reveal Animation ---
       const assembleTl = gsap.timeline({
         scrollTrigger: {
             trigger: triggerRef.current,
@@ -64,66 +62,37 @@ const HorizontalScrollSection = () => {
         }
       });
 
-      // 1. Inputs Fly In (Premium Assemble)
+      // 1. Inputs Fly In
       if (slide1InputsRef.current) {
          const items = slide1InputsRef.current.children;
          assembleTl.from(items, {
-            y: 40,      
+            y: 30,      
             opacity: 0,
-            scale: 0.8,
-            duration: 1,
-            stagger: 0.08,
-            ease: "power3.out", // Smooth, premium feel
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power2.out",
          }, 0);
       }
-
-      // 2. Brain Spin-Up & Scale (Assemble Core)
-      if (brainContainerRef.current) {
-         assembleTl.from(brainContainerRef.current, {
-            scale: 0.8,
-            opacity: 0,
-            duration: 1.2,
-            ease: "power3.out",
-         }, 0.2);
-      }
-
-      // 3. Connections Line Growth
-      if (slide1PathRef.current) {
-          assembleTl.from(slide1PathRef.current, {
-              strokeDasharray: 300,
-              strokeDashoffset: 300,
-              duration: 1.5,
+      
+      // 2. Connectors Draw
+      if (slide1ConnectorsRef.current) {
+          assembleTl.from(slide1ConnectorsRef.current, {
+              opacity: 0,
+              scaleY: 0,
+              transformOrigin: "top",
+              duration: 0.8,
               ease: "power2.out"
           }, 0.5);
       }
-      
-      // Continuous Animations (Brain Pulse & Float)
-      if (brainRef.current) {
-        gsap.to(brainRef.current, {
-          scale: 1.05,
-          duration: 2.5,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        });
-      }
+
+      // 3. Bottom Card Entry
       if (brainContainerRef.current) {
-        gsap.to(brainContainerRef.current, {
-           y: -20,
-           duration: 4,
-           repeat: -1,
-           yoyo: true,
-           ease: "sine.inOut",
-           delay: 1.5 
-        });
-      }
-      if (brainRingRef.current) {
-        gsap.to(brainRingRef.current, {
-           rotation: 360,
-           duration: 30,
-           repeat: -1,
-           ease: "none"
-        });
+         assembleTl.from(brainContainerRef.current, {
+            y: 20,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out",
+         }, 0.8);
       }
 
       // --- Slide 2: Data Lines Animation ---
@@ -172,65 +141,114 @@ const HorizontalScrollSection = () => {
         ref={sectionRef}
         className="flex h-full w-[200vw]"
       >
-        {/* ================= SLIDE 1: AI Interpretation (Assembly) ================= */}
-        <div className="w-screen h-full flex flex-col relative bg-[#020B1C]">
+        {/* ================= SLIDE 1: Interpret (Tree Visualization) ================= */}
+        <div className="w-screen h-full flex flex-col relative bg-[#020B1C] pl-0 lg:pl-20">
           
-          {/* Header Area */}
-          <div className="w-full pt-12 md:pt-24 flex flex-col justify-end items-center md:items-start md:pl-[15vw] px-6 z-20 shrink-0 pb-8">
-             <div className="text-center md:text-left">
-                <h2 className="text-3xl md:text-5xl lg:text-7xl font-bold text-white mb-2 md:mb-4 tracking-tight">
-                AI Health Intelligence
-                </h2>
-                <p className="text-base md:text-xl text-emerald-400/80 font-light tracking-wide">
-                assembling your biological profile
-                </p>
-             </div>
+          {/* Header - Flow layout to strictly prevent overlap */}
+          <div className="w-full pt-20 md:pt-4 px-6 md:px-20 z-0">
+             <h2 className="text-5xl lg:text-8xl text-white font-serif italic tracking-tight text-center md:text-left">
+               Interpret
+             </h2>
           </div>
 
-          {/* Visualization Container */}
-          <div className="w-full flex-1 flex flex-col md:flex-row items-center justify-center md:justify-start md:pl-[20vw] gap-8 md:gap-32 relative z-10 pb-12">
+          {/* Main Tree Container - Centered */}
+          <div className="flex-1 flex flex-col items-center justify-center relative z-10 w-full px-4 pt-8 md:pt-0">
             
-            {/* 1. Input Sources Grid */}
-            <div ref={slide1InputsRef} className="grid grid-cols-2 gap-4 md:gap-8 relative">
-               {slide1Icons.map((item, i) => (
-                 <div key={i} className="flex flex-col items-center justify-center w-28 h-28 md:w-40 md:h-40 bg-white/5 backdrop-blur-md border border-white/10 rounded-2xl md:rounded-3xl shadow-lg hover:bg-white/10 transition-colors duration-300 group cursor-default">
-                   <div className="mb-2 text-emerald-400 group-hover:scale-110 transition-transform duration-300">
-                     <item.icon className="text-2xl md:text-4xl" />
+            {/* 1. TOP NODES ROW */}
+            {/* 1. TOP NODES ROW - Using Grid for perfect alignment with connectors */}
+            {/* 1. TOP NODES ROW - Using Grid for perfect alignment with connectors */}
+            <div ref={slide1InputsRef} className="grid grid-cols-5 w-full max-w-5xl mx-auto gap-0 relative z-10 px-1 md:px-0">
+               {[
+                 { label: "Family History", icon: FaHistory, color: "bg-blue-400" },
+                 { label: "Nutrition", icon: FaFileMedicalAlt, color: "bg-yellow-400" },
+                 { label: "Exercise", icon: FaRunning, color: "bg-[#8B8B7A]" }, 
+                 { label: "Sleep", icon: FaDna, color: "bg-orange-400" },
+                 { label: "Past Labs", icon: FaFileMedicalAlt, color: "bg-pink-300" }
+               ].map((item, i) => (
+                 <div key={i} className="flex justify-center w-full px-1 md:px-2">
+                   <div className="flex flex-col items-center w-full max-w-[140px] transition-transform hover:scale-105 duration-300 group">
+                      <div className="bg-white p-2 md:p-3 lg:p-4 rounded-lg shadow-xl shadow-blue-900/10 border border-slate-100 w-full flex flex-col items-center gap-1 md:gap-3 h-16 md:h-24 lg:h-28 justify-center z-20 relative">
+                          <div className={`w-5 h-5 md:w-8 md:h-8 rounded ${item.color} flex items-center justify-center text-white text-[10px] md:text-xs shadow-sm`}>
+                            <item.icon />
+                          </div>
+                          <span className="text-[7px] md:text-[10px] lg:text-xs font-bold text-slate-500 uppercase tracking-wider text-center leading-tight">{item.label}</span>
+                      </div>
                    </div>
-                   <span className="text-white text-[10px] md:text-sm font-medium tracking-wide text-center px-2 opacity-80">{item.text}</span>
                  </div>
                ))}
-               
-               {/* Mobile Connection Line */}
-               <div className="absolute left-1/2 top-full h-8 w-0.5 bg-linear-to-b from-emerald-500/50 to-transparent md:hidden" />
             </div>
 
-            {/* 2. Connection Arrow (Desktop Only) */}
-            <div className="hidden md:flex items-center w-40 relative opacity-60">
-                <svg className="w-full h-24 overflow-visible">
-                    <path 
-                        ref={slide1PathRef}
-                        d="M 0,40 L 150,40" 
-                        fill="none" 
-                        stroke="#10b981" 
-                        strokeWidth="2" 
-                        strokeLinecap="round"
-                        strokeDasharray="150" 
-                    />
-                    <polygon points="150,35 160,40 150,45" fill="#10b981" />
-                </svg>
-            </div>
+            {/* 2. CONNECTOR LINES (SVG Tree) */}
+            {/* 2. CONNECTOR LINES (SVG Tree) */}
+            {/* 2. CONNECTOR LINES (SVG Tree) */}
+             <div ref={slide1ConnectorsRef} className="w-full max-w-5xl h-16 md:h-20 relative z-0 -mt-2">
+               <svg className="absolute inset-0 w-full h-full overflow-visible" preserveAspectRatio="none">
+                 {/* Vertical Lines Down from centers of 5 cols: 10%, 30%, 50%, 70%, 90% */}
+                 {[10, 30, 50, 70, 90].map((x, i) => (
+                    <line key={i} x1={`${x}%`} y1="0" x2={`${x}%`} y2="50%" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" />
+                 ))}
 
-            {/* 3. The Brain (Assembly Core) */}
-            <div ref={brainContainerRef} className="relative z-10 origin-center">
-               <div className="absolute inset-0 bg-emerald-500/20 blur-[60px] rounded-full scale-150 animate-pulse"></div>
-               <div ref={brainRef} className="w-40 h-40 md:w-72 md:h-72 rounded-full bg-linear-to-br from-emerald-900 via-black to-emerald-950 border border-emerald-500/30 flex flex-col items-center justify-center relative shadow-[0_0_80px_rgba(16,185,129,0.3)] backdrop-blur-xl">
-                  <div className="text-5xl md:text-8xl mb-4 drop-shadow-[0_0_20px_rgba(16,185,129,0.5)] animate-pulse">
-                    🧠
+                 {/* Horizontal Connector Line (from first vertical to last vertical) */}
+                 <line x1="10%" y1="50%" x2="90%" y2="50%" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" />
+
+                 {/* Vertical Line to Bottom Card (From Center) */}
+                 <line x1="50%" y1="50%" x2="50%" y2="100%" stroke="rgba(255,255,255,0.6)" strokeWidth="1.5" strokeDasharray="4 4" vectorEffect="non-scaling-stroke" />
+                 
+                 {/* Arrow Head */}
+                 <path d="M 50%,100% l -5,-8 h 10 z" fill="rgba(255,255,255,0.6)" />
+               </svg>
+             </div>
+
+            {/* 3. BOTTOM NODE (Metabolic Risk) */}
+            <div ref={brainContainerRef} className="bg-white rounded-xl shadow-2xl p-4 md:p-6 w-[85vw] max-w-sm md:w-96 relative z-10 mx-auto">
+               <div className="flex items-start gap-3 md:gap-4 mb-4 md:mb-6">
+                  <div className="w-8 h-8 md:w-10 md:h-10 bg-red-50 rounded-lg flex items-center justify-center text-xl md:text-2xl">
+                     liver
                   </div>
-                  <div className="text-white font-bold text-lg md:text-3xl tracking-tighter">AI ENGINE</div>
-                  <div ref={brainRingRef} className="absolute inset-[-12px] md:inset-[-24px] rounded-full border border-emerald-500/20 border-dashed pointer-events-none"></div>
-                  <div className="absolute inset-[-4px] md:inset-[-8px] rounded-full border border-white/5 pointer-events-none"></div>
+                  <div>
+                    <h3 className="text-slate-900 font-bold text-base md:text-lg leading-tight">Metabolic risk</h3>
+                    <div className="text-[10px] font-bold text-orange-500 flex items-center gap-1 mt-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+                      NEEDS ATTENTION
+                    </div>
+                  </div>
+               </div>
+
+               <p className="text-slate-600 text-xs md:text-sm mb-4 md:mb-6 leading-relaxed">
+                 Address early insulin resistance to prevent developing diabetes.
+               </p>
+
+               <div className="border-t border-slate-100 pt-3 md:pt-4">
+                  <div className="flex justify-between items-center mb-2 md:mb-3">
+                    <span className="text-[10px] md:text-xs font-semibold text-slate-500">What we assessed</span>
+                    <span className="text-[10px] md:text-xs text-slate-400">^</span> 
+                  </div>
+                  
+                  {/* Clinician Insights Box */}
+                  <div className="bg-[#EEF2FF] rounded-lg p-3 border border-indigo-100 mb-4">
+                     <div className="flex items-center gap-2 mb-2">
+                        <div className="w-4 h-4 rounded-full bg-slate-800 overflow-hidden relative">
+                           {/* Add avatar placeholder or icon */}
+                           <div className="absolute inset-0 bg-indigo-500/20"></div>
+                        </div>
+                        <span className="text-[10px] font-bold text-slate-700 uppercase tracking-wide">Clinician Insights</span>
+                     </div>
+                     <p className="text-[10px] md:text-[11px] text-slate-600 leading-relaxed font-medium">
+                       Your elevated <span className="font-bold border-b border-slate-300">HOMA-IR</span> levels, combined with being <span className="font-bold border-b border-slate-300">overweight</span> and having a <span className="font-bold border-b border-slate-300">family history</span> contributes to your risk.
+                     </p>
+                  </div>
+
+                  {/* HOMA-IR Meter */}
+                  <div className="bg-slate-50 rounded p-3 border border-slate-100/50">
+                     <div className="flex justify-between items-baseline mb-1">
+                        <span className="text-[10px] font-bold text-slate-500 uppercase">HOMA-IR</span>
+                         <span className="text-[10px] font-bold text-orange-500">HIGH</span>
+                     </div>
+                     <div className="text-2xl font-bold text-slate-800 tracking-tight">2.7</div>
+                     <div className="w-full h-1.5 bg-slate-200 rounded-full mt-2 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-1/4 h-full bg-orange-400 rounded-r-full"></div>
+                     </div>
+                  </div>
                </div>
             </div>
 

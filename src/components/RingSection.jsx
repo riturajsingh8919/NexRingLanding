@@ -23,6 +23,18 @@ const RingSection = () => {
   const nxLabsContentRef = useRef(null);
   const nxLabsTitleRef = useRef(null);
   const nxLabsSubtitleRef = useRef(null);
+  const nxLabsMarqueeRef = useRef(null);
+
+  const tickerItems = [
+    { label: "Heart", color: "bg-red-400" },
+    { label: "Anxiety", color: "bg-blue-400" },
+    { label: "Thyroid", color: "bg-purple-400" },
+    { label: "Hormones", color: "bg-pink-400" },
+    { label: "Fatigue", color: "bg-yellow-400" },
+    { label: "PCOS", color: "bg-teal-400" },
+    { label: "Stress", color: "bg-orange-400" },
+    { label: "Sleep", color: "bg-indigo-400" },
+  ];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -43,7 +55,7 @@ const RingSection = () => {
         zIndex: 0,
         opacity: 1 
       });
-      gsap.set([nxLabsTitleRef.current, nxLabsSubtitleRef.current], {
+      gsap.set([nxLabsTitleRef.current, nxLabsSubtitleRef.current, nxLabsMarqueeRef.current], {
         opacity: 0,
         y: 50
       });
@@ -106,7 +118,7 @@ const RingSection = () => {
         }, "-=2.5") // Overlap significantly with zoom
 
         // NxLabs Text Entry (Parallax effect)
-        .to([nxLabsTitleRef.current, nxLabsSubtitleRef.current], { 
+        .to([nxLabsTitleRef.current, nxLabsSubtitleRef.current, nxLabsMarqueeRef.current], { 
           opacity: 1, 
           y: 0, 
           duration: 2,
@@ -142,19 +154,40 @@ const RingSection = () => {
         </div>
 
         {/* Content */}
-        <div ref={nxLabsContentRef} className="absolute bottom-20 md:bottom-32 left-0 right-0 text-center px-4 z-10">
-          <h2 
-            ref={nxLabsTitleRef}
-            className="text-5xl md:text-6xl lg:text-8xl font-medium text-white mb-6 tracking-tight"
-          >
-            NxLabs
-          </h2>
-          <p 
-            ref={nxLabsSubtitleRef}
-            className="text-lg md:text-xl lg:text-5xl font-extralight text-white/80"
-          >
-            Contextualize with 150+ biomarkers. Predict 1000+ conditions
-          </p>
+        <div ref={nxLabsContentRef} className="absolute inset-0 flex flex-col items-center justify-center z-10 px-4">
+          <div className="text-center">
+            <h2 
+              ref={nxLabsTitleRef}
+              className="text-4xl md:text-6xl lg:text-8xl text-white mb-4 tracking-tight leading-tight"
+            >
+              <span className="font-serif italic font-thin mr-3">Contextualize</span>
+               with NxLabs
+            </h2>
+            <p 
+              ref={nxLabsSubtitleRef}
+              className="text-base md:text-3xl xl:text-4xl text-white/80 font-light tracking-wide"
+            >
+              Lab Testing with 150+ biomarkers. Predict 1000+ conditions
+            </p>
+          </div>
+
+          {/* Marquee Section */}
+          <div ref={nxLabsMarqueeRef} className="w-full max-w-7xl mx-auto overflow-hidden relative py-12 md:py-16">
+             <div className="relative z-10 flex flex-col items-center justify-center gap-10">
+                {/* Scrolling Ticker */}
+                <div className="flex overflow-hidden w-full mask-gradient">
+                   <div className="flex animate-marquee hover-pause whitespace-nowrap gap-4 md:gap-8 min-w-full">
+                      {/* Ticker Items - Repeated twice for smooth loop */}
+                      {[...tickerItems, ...tickerItems, ...tickerItems, ...tickerItems].map((item, i) => (
+                        <div key={i} className="flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-2 md:px-6 md:py-3 rounded-full border border-white/20 hover:bg-white/20 transition-colors">
+                           <span className={`w-2 h-2 md:w-3 md:h-3 rounded-full ${item.color} shadow-[0_0_10px_rgba(255,255,255,0.5)]`}></span>
+                           <span className="text-white text-xs md:text-sm font-medium tracking-wider uppercase">{item.label}</span>
+                        </div>
+                      ))}
+                   </div>
+                </div>
+             </div>
+          </div>
         </div>
       </section>
 
@@ -170,7 +203,7 @@ const RingSection = () => {
             <span className="font-serif italic mr-2 md:mr-3 font-normal">Capture</span>
              with NxRing
           </h2>
-          <p ref={ringSubtitleRef} className="text-xs md:text-base text-white/60 font-light tracking-wide pl-1">
+          <p ref={ringSubtitleRef} className="text-base lg:text-2xl text-white font-light tracking-wide pl-1">
             Your daily vitals monitored 24/7
           </p>
         </div>
